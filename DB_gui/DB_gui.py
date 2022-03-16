@@ -231,7 +231,8 @@ class StoreData():
             (sep,dbdir,filedir)=self.check_ini()
             if self.filedirectory!=filedir:
                 self.write_to_ini()
-            self.find_sep(self.seplist)
+            seplist=[item for item in self.seplist]
+            self.find_sep(seplist)
             if np.shape(self.data)[1]!=3:
                 self.error.set('Error:')
                 self.errormsg.set("Data in file doesn't\nseem to be optical data.")
@@ -282,7 +283,7 @@ class StoreData():
                 tmp=[]
                 for line in f:
                     a=line.strip()
-                    tmp.append(a.split(self.seplist[-1]))  
+                    tmp.append(a.split(seplist[-1]))  
                 try:
                     data=[[float(y) for y in x] for x in tmp[1:]]
                     self.data=np.array(data)
