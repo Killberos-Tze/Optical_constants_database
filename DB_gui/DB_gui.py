@@ -226,6 +226,8 @@ class StoreData():
             
     def Get_file(self):
         self.filename = askopenfilename(title="Select database.", initialdir=self.filedirectory, filetypes=[("Optical data file","*txt")])
+        self.error.set('')
+        self.errormsg.set('')
         if self.filename:
             self.filedirectory=os.path.dirname(self.filename)
             (sep,dbdir,filedir)=self.check_ini()
@@ -238,8 +240,6 @@ class StoreData():
                     self.error.set('Error:')
                     self.errormsg.set("Data in file doesn't\nseem to be optical data.")
                 else:
-                    self.error.set('')
-                    self.errormsg.set('')
                     self.process_data()
                     if self.error.get()=='':
                         matname=os.path.splitext(os.path.basename(self.filename))[0]
