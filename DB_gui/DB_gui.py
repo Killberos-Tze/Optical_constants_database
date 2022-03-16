@@ -233,24 +233,25 @@ class StoreData():
                 self.write_to_ini()
             seplist=[item for item in self.seplist]
             self.find_sep(seplist)
-            if np.shape(self.data)[1]!=3:
-                self.error.set('Error:')
-                self.errormsg.set("Data in file doesn't\nseem to be optical data.")
-            else:
-                self.error.set('')
-                self.errormsg.set('')
-                self.process_data()
-                if self.error.get()=='':
-                    matname=os.path.splitext(os.path.basename(self.filename))[0]
-                    self.errorDB,self.mat_id=ODB_class().insert_into_materials(self.conn,(matname,self.data[0,0],self.data[-1,0],self.unit,np.shape(self.data)[0]))
-                    if self.errorDB!='':
-                        self.error.set('Error:')
-                        self.errormsg.set(self.errorDB)
-                    else:
-                        self.pause()
-                        ODB_class().insert_into_data(self.conn,self.data,self.mat_id)
-                        self.List_of_materials()
-                        self.endpause()
+            if self.error.get()=='':
+                if np.shape(self.data)[1]!=3:
+                    self.error.set('Error:')
+                    self.errormsg.set("Data in file doesn't\nseem to be optical data.")
+                else:
+                    self.error.set('')
+                    self.errormsg.set('')
+                    self.process_data()
+                    if self.error.get()=='':
+                        matname=os.path.splitext(os.path.basename(self.filename))[0]
+                        self.errorDB,self.mat_id=ODB_class().insert_into_materials(self.conn,(matname,self.data[0,0],self.data[-1,0],self.unit,np.shape(self.data)[0]))
+                        if self.errorDB!='':
+                            self.error.set('Error:')
+                            self.errormsg.set(self.errorDB)
+                        else:
+                            self.pause()
+                            ODB_class().insert_into_data(self.conn,self.data,self.mat_id)
+                            self.List_of_materials()
+                            self.endpause()
     
     def pause(self):
         self.finish.configure(state='disabled')
